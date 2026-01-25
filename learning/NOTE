@@ -1,0 +1,20 @@
+# baraye behtar build kardan app
+go build -ldflags="-s -w" -o app main.go
+
+# baraye hash kardan binnery and minimum kardan zip kardan
+upx --best --lzma app
+
+
+# esme func ro random mikone
+go install mvdan.cc/garble@latest
+garble -literals -tiny build -o app
+#behtar
+garble -literals -seed=random build -ldflags="-s -w"
+
+
+garble -literals -seed=random build \
+  -trimpath \
+  -ldflags="-s -w" \
+  -o app
+
+upx --best --lzma app
