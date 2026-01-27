@@ -2,18 +2,21 @@ package main
 
 import (
 	"math/rand"
+	"time"
 
 	"github.com/nsf/termbox-go"
 )
 
-func makeWorld(rows, cols int) [][]rune {
+var random = rand.New(rand.NewSource(time.Now().UnixNano()))
+
+func makeWorld(rows, cols int, density float64) [][]rune {
 	world := make([][]rune, rows)
 
 	for h := 0; h < rows; h++ {
 		world[h] = make([]rune, cols)
 
 		for w := 0; w < cols; w++ {
-			if rand.Float64() > 0.1 {
+			if random.Float64() < density {
 				world[h][w] = '.'
 			} else {
 				world[h][w] = ' '
@@ -24,6 +27,45 @@ func makeWorld(rows, cols int) [][]rune {
 	return world
 }
 
+func draw(world [][]rune, playerRow, playerCol int) {
+	rows := len(world)
+	if rows == 0 {
+		return
+	}
+	cols := len(world[0])
+
+	for h := 0; h < rows; h++ {
+		for w := 0; w < cols; w++ {
+			char := world[h][w]
+			color := termbox.ColorGreen
+			if h == playerRow && w == playerCol {
+				char = 'X'
+				color = termbox.ColorRed
+			}
+
+			termbox.SetCell(w, h, char, color, termbox.ColorBlack)
+		}
+	}
+	termbox.Flush()
+}
+
+func placePlayer(world [][]rune) (int, int) {
+	rows := len(world)
+	if rows == 0 {
+		return 0, 0
+	}
+	cols := len(world[0])
+
+	for {
+		r := random.Intn(rows)
+		c := random.Intn(cols)
+
+		if world[r][c] == ' ' {
+			return r, c
+		}
+	}
+}
+
 func main() {
 	termbox.Init()
 	defer termbox.Close()
@@ -32,34 +74,75 @@ func main() {
 	// height: rows
 	cols, rows := termbox.Size()
 
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-
 	// Make the game world
-	world := makeWorld(rows, cols)
+	const wallDensity = 0.04
+	world := makeWorld(rows, cols, wallDensity)
 
-	// Draw the world
-	for h := 0; h < rows; h++ {
-		for w := 0; w < cols; w++ {
-			termbox.SetCell(
-				w,
-				h,
-				world[h][w],
-				termbox.ColorGreen,
-				termbox.ColorBlack,
-			)
+	// place player
+	playerRows, playerCols := placePlayer(world)
+
+	eventChan := make(chan termbox.Event)
+	go func() {
+		for {
+			ev := termbox.PollEvent()
+			eventChan <- ev
 		}
-	}
+	}()
+	playing := true
+	const fps = 10
+	// For Stable the Game (baraye sabeet bodan soraat bazi)
+	ticker := time.NewTicker(time.Second / fps)
+	defer ticker.Stop()
 
-	termbox.Flush()
+	// Loop Game
+	for playing {
+		select {
+		// 🎮 INPUT (non-blocking)
+		case evt := <-eventChan:
+			switch evt.Type {
+			case termbox.EventKey:
+				switch evt.Key {
+				case termbox.KeyEsc:
+					playing = false
 
-	for {
-		ev := termbox.PollEvent()
+					// Game Logic
+				case termbox.KeyArrowUp:
+					if playerRows > 0 && world[playerRows-1][playerCols] == ' ' {
+						playerRows--
+					}
+				case termbox.KeyArrowDown:
+					if playerRows < rows-1 && world[playerRows+1][playerCols] == ' ' {
+						playerRows++
+					}
+				case termbox.KeyArrowLeft:
+					if playerCols > 0 && world[playerRows][playerCols-1] == ' ' {
+						playerCols--
+					}
+				case termbox.KeyArrowRight:
+					if playerCols < cols-1 && world[playerRows][playerCols+1] == ' ' {
+						playerCols++
+					}
 
-		if ev.Type == termbox.EventKey {
-			if ev.Key == termbox.KeyEsc || ev.Ch == 'q' || ev.Ch == 'Q' {
-				break
+				default:
+					if evt.Ch == 'q' || evt.Ch == 'Q' {
+						playing = false
+					}
+				}
+
+			case termbox.EventResize:
+				cols, rows = evt.Width, evt.Height
+				world = makeWorld(rows, cols, wallDensity)
+				playerRows, playerCols = placePlayer(world)
 			}
+
+		// Tick / FPS control
+		case <-ticker.C:
+			// draw the world
+			termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+			draw(world, playerRows, playerCols)
+
 		}
+
 	}
 
 }
