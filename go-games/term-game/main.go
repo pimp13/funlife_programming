@@ -37,10 +37,10 @@ func draw(world [][]rune, playerRow, playerCol int) {
 	for h := 0; h < rows; h++ {
 		for w := 0; w < cols; w++ {
 			char := world[h][w]
-			color := termbox.ColorGreen
+			color := termbox.ColorLightCyan
 			if h == playerRow && w == playerCol {
-				char = 'X'
-				color = termbox.ColorRed
+				char = '🛸'
+				color = termbox.ColorLightRed
 			}
 
 			termbox.SetCell(w, h, char, color, termbox.ColorBlack)
@@ -75,7 +75,7 @@ func main() {
 	cols, rows := termbox.Size()
 
 	// Make the game world
-	const wallDensity = 0.04
+	const wallDensity = 0.1
 	world := makeWorld(rows, cols, wallDensity)
 
 	// place player
