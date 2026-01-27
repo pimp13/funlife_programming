@@ -1,26 +1,55 @@
 package main
 
 import (
-	"fmt"
+	"math/rand"
 
 	"github.com/nsf/termbox-go"
 )
+
+func makeWorld(rows, cols int) [][]rune {
+	world := make([][]rune, rows)
+
+	for h := 0; h < rows; h++ {
+		world[h] = make([]rune, cols)
+
+		for w := 0; w < cols; w++ {
+			if rand.Float64() > 0.1 {
+				world[h][w] = '.'
+			} else {
+				world[h][w] = ' '
+			}
+		}
+	}
+
+	return world
+}
 
 func main() {
 	termbox.Init()
 	defer termbox.Close()
 
+	// width: cols
+	// height: rows
 	cols, rows := termbox.Size()
 
 	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-	msg := fmt.Sprintf("Cols: %d | Rows: %d", cols, rows)
 
-	x := (cols - len(msg)) / 2
-	y := rows / 2
+	// Make the game world
+	world := makeWorld(rows, cols)
 
-	for i, ch := range msg {
-		termbox.SetCell(x+i, y, ch, termbox.ColorGreen, termbox.ColorBlack)
+	// Draw the world
+	for h := 0; h < rows; h++ {
+		for w := 0; w < cols; w++ {
+			termbox.SetCell(
+				w,
+				h,
+				world[h][w],
+				termbox.ColorGreen,
+				termbox.ColorBlack,
+			)
+		}
 	}
+
 	termbox.Flush()
 
 	for {
@@ -32,7 +61,5 @@ func main() {
 			}
 		}
 	}
-
-	// termbox.SetCell(10, 10, '@', termbox.ColorGreen, termbox.ColorBlack)
 
 }
