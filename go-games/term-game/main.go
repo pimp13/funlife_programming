@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -46,6 +47,7 @@ func eatFood(foods []Food, row, col int) ([]Food, bool) {
 			return foods, true
 		}
 	}
+	// TODO: Vaghti food khoorde shod bayad ye spawnFood beshe dobare
 	return foods, false
 }
 
@@ -67,12 +69,22 @@ func makeWorld(rows, cols int, density float64) [][]rune {
 	return world
 }
 
-func draw(world [][]rune, playerRow, playerCol int, foods []Food) {
+func drawText(x, y int, text string, fg, bg termbox.Attribute) {
+	for i, ch := range text {
+		termbox.SetCell(x+i, y, ch, fg, bg)
+	}
+}
+
+func draw(world [][]rune, playerRow, playerCol int, foods []Food, score int) {
 	rows := len(world)
 	if rows == 0 {
 		return
 	}
 	cols := len(world[0])
+
+	// +1 mikonim height player va foods ro ke 1-vahed bishter beshe ta score jaa beshe
+	hud := fmt.Sprintf("Score: %d", score)
+	drawText(0, 0, hud, termbox.ColorWhite|termbox.AttrBold, termbox.ColorBlue)
 
 	for h := 0; h < rows; h++ {
 		for w := 0; w < cols; w++ {
@@ -83,13 +95,14 @@ func draw(world [][]rune, playerRow, playerCol int, foods []Food) {
 				color = termbox.ColorLightRed
 			}
 
-			termbox.SetCell(w, h, char, color, termbox.ColorBlack)
+			termbox.SetCell(w, h+1, char, color, termbox.ColorBlack)
 		}
 	}
 
 	for _, food := range foods {
-		termbox.SetCell(food.Col, food.Row, food.Ch, termbox.ColorYellow, termbox.ColorBlack)
+		termbox.SetCell(food.Col, food.Row+1, food.Ch, termbox.ColorYellow, termbox.ColorBlack)
 	}
+
 	termbox.Flush()
 }
 
@@ -189,7 +202,7 @@ func main() {
 				if moved {
 					foods, eaten = eatFood(foods, playerRows, playerCols)
 					if eaten {
-						score++
+						score += 10
 					}
 				}
 
@@ -204,7 +217,7 @@ func main() {
 		case <-ticker.C:
 			// draw the world
 			termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-			draw(world, playerRows, playerCols, foods)
+			draw(world, playerRows, playerCols, foods, score)
 
 		}
 
