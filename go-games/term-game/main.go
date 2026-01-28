@@ -17,6 +17,12 @@ type Food struct {
 	Age time.Duration
 }
 
+type Enemy struct {
+	Row int
+	Col int
+	Ch  rune
+}
+
 func spawnFood(world [][]rune, count int) []Food {
 	rows := len(world)
 	cols := len(world[0])
@@ -38,6 +44,36 @@ func spawnFood(world [][]rune, count int) []Food {
 	}
 
 	return foods
+}
+
+func spawnEnemy(world [][]rune, count int) []Enemy {
+	rows := len(world)
+	cols := len(world[0])
+
+	enemies := make([]Enemy, 0, count)
+	for len(enemies) < count {
+		r := random.Intn(rows)
+		c := random.Intn(cols)
+		if world[r][c] == ' ' {
+			enemies = append(enemies, Enemy{
+				Row: r,
+				Col: c,
+				Ch:  '👾',
+			})
+		}
+	}
+
+	return enemies
+}
+
+func enemyLogic(enemies []Enemy, row, col int) ([]Enemy, bool) {
+	for i := 0; i < len(enemies); i++ {
+		if enemies[i].Row == row && enemies[i].Col == col {
+			enemies = append(enemies[:i], enemies[i+1:]...)
+			return enemies, true
+		}
+	}
+	return enemies, false
 }
 
 func eatFood(foods []Food, row, col int) ([]Food, bool) {
@@ -75,7 +111,7 @@ func drawText(x, y int, text string, fg, bg termbox.Attribute) {
 	}
 }
 
-func draw(world [][]rune, playerRow, playerCol int, foods []Food, score int) {
+func draw(world [][]rune, playerRow, playerCol int, foods []Food, score int, enemies []Enemy) {
 	rows := len(world)
 	if rows == 0 {
 		return
@@ -101,6 +137,10 @@ func draw(world [][]rune, playerRow, playerCol int, foods []Food, score int) {
 
 	for _, food := range foods {
 		termbox.SetCell(food.Col, food.Row+1, food.Ch, termbox.ColorYellow, termbox.ColorBlack)
+	}
+
+	for _, enemy := range enemies {
+		termbox.SetCell(enemy.Col, enemy.Row+1, enemy.Ch, termbox.ColorDefault, termbox.ColorBlack)
 	}
 
 	termbox.Flush()
@@ -139,6 +179,7 @@ func main() {
 	playerRows, playerCols := placePlayer(world)
 
 	foods := spawnFood(world, 15)
+	enemies := spawnEnemy(world, 12)
 
 	eventChan := make(chan termbox.Event)
 	go func() {
@@ -147,13 +188,14 @@ func main() {
 			eventChan <- ev
 		}
 	}()
-	playing := true
+	var playing bool = true
 	const fps = 10
 	// For Stable the Game (baraye sabeet bodan soraat bazi)
 	ticker := time.NewTicker(time.Second / fps)
 	defer ticker.Stop()
-	var score int
+	var score int = 1
 	var eaten bool
+	var gameOver bool
 
 	// Loop Game
 	for playing {
@@ -204,6 +246,10 @@ func main() {
 					if eaten {
 						score += 10
 					}
+					enemies, gameOver = enemyLogic(enemies, playerRows, playerCols)
+					if gameOver {
+						playing = false
+					}
 				}
 
 			case termbox.EventResize:
@@ -217,12 +263,15 @@ func main() {
 		case <-ticker.C:
 			// draw the world
 			termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
-			draw(world, playerRows, playerCols, foods, score)
+			draw(world, playerRows, playerCols, foods, score, enemies)
 
 		}
 
 		if len(foods) < 5 {
 			foods = append(foods, spawnFood(world, 1)...)
+		}
+		if score <= 0 {
+			playing = false
 		}
 
 	}
