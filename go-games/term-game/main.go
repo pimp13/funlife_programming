@@ -72,10 +72,22 @@ func spawnEnemy(world [][]rune, count int) []Enemy {
 
 func enemyLogic(enemies []Enemy, playerRow, playerCol int) ([]Enemy, bool) {
 	for i := 0; i < len(enemies); i++ {
+
 		// Move random enemy
-		if random.Float64() > 0.7 {
-			enemies[i].Row += randomChoice([]int{0, 1, -1})
-			enemies[i].Col += randomChoice([]int{0, 1, -1})
+		if random.Float64() > 0.2 {
+
+			if enemies[i].Row > playerRow {
+				enemies[i].Row--
+			} else if enemies[i].Col > playerCol {
+				enemies[i].Col--
+			} else if enemies[i].Row < playerRow {
+				enemies[i].Row++
+			} else if enemies[i].Col < playerCol {
+				enemies[i].Col++
+			}
+
+			// enemies[i].Row += randomChoice([]int{0, 1, -1})
+			// enemies[i].Col += randomChoice([]int{0, 1, -1})
 		}
 
 		// Died player
@@ -83,8 +95,19 @@ func enemyLogic(enemies []Enemy, playerRow, playerCol int) ([]Enemy, bool) {
 			enemies = append(enemies[:i], enemies[i+1:]...)
 			return enemies, true
 		}
+
 	}
 	return enemies, false
+}
+
+func moveEnemy(enemies []Enemy) {
+	for i := 0; i < len(enemies); i++ {
+		// Move random enemy
+		if random.Float64() > 0.7 {
+			enemies[i].Row += randomChoice([]int{0, 1, -1})
+			enemies[i].Col += randomChoice([]int{0, 1, -1})
+		}
+	}
 }
 
 func eatFood(foods []Food, row, col int) ([]Food, bool) {
@@ -271,6 +294,7 @@ func main() {
 				world = makeWorld(rows, cols, wallDensity)
 				playerRows, playerCols = placePlayer(world)
 				foods = spawnFood(world, 10)
+
 			}
 
 		// Tick / FPS control
