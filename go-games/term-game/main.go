@@ -23,6 +23,10 @@ type Enemy struct {
 	Ch  rune
 }
 
+func randomChoice[T comparable](slice []T) T {
+	return slice[random.Intn(len(slice))]
+}
+
 func spawnFood(world [][]rune, count int) []Food {
 	rows := len(world)
 	cols := len(world[0])
@@ -66,9 +70,16 @@ func spawnEnemy(world [][]rune, count int) []Enemy {
 	return enemies
 }
 
-func enemyLogic(enemies []Enemy, row, col int) ([]Enemy, bool) {
+func enemyLogic(enemies []Enemy, playerRow, playerCol int) ([]Enemy, bool) {
 	for i := 0; i < len(enemies); i++ {
-		if enemies[i].Row == row && enemies[i].Col == col {
+		// Move random enemy
+		if random.Float64() > 0.7 {
+			enemies[i].Row += randomChoice([]int{0, 1, -1})
+			enemies[i].Col += randomChoice([]int{0, 1, -1})
+		}
+
+		// Died player
+		if enemies[i].Row == playerRow && enemies[i].Col == playerCol {
 			enemies = append(enemies[:i], enemies[i+1:]...)
 			return enemies, true
 		}
@@ -248,6 +259,9 @@ func main() {
 					}
 					enemies, gameOver = enemyLogic(enemies, playerRows, playerCols)
 					if gameOver {
+						termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+						// drawText(cols, rows+5, "You Died", termbox.ColorWhite|termbox.AttrBold, termbox.ColorBlue)
+						time.Sleep(time.Second)
 						playing = false
 					}
 				}
