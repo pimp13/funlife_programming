@@ -65,6 +65,26 @@ func (it *Iterator[V]) ForEach(f func(V)) {
 	}
 }
 
+func (it *Iterator[T]) Take(n int) *Iterator[T] {
+	return &Iterator[T]{
+		seq: func(yield func(T) bool) {
+			if n <= 0 {
+				return
+			}
+			count := 0
+			for v := range it.seq {
+				if !yield(v) {
+					return
+				}
+				count++
+				if count >= n {
+					return
+				}
+			}
+		},
+	}
+}
+
 type User struct {
 	ID   uint
 	Name string
@@ -77,7 +97,7 @@ func main() {
 		{Name: "Hassan", ID: 3},
 	}
 	result := From(myUser).
-		Map(func(u User) User { fmt.Printf("user: %s\n", u.Name); return u })
+		Take(2).Collect()
 
 	// result := From(myUser)
 
