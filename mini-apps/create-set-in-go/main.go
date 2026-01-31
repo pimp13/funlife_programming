@@ -1,20 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-type Set = map[string]struct{}
+/*
+Set hast shabihe set dar Python
+ya shabihe be HashMap in Rust
+*/
 
-func Add(s Set, v string) {
+type Set[T comparable] = map[T]struct{}
+
+func Add[T comparable](s Set[T], v T) {
 	s[v] = struct{}{}
 }
 
-func Contains(s Set, v string) bool {
+func Contains[T comparable](s Set[T], v T) bool {
 	_, ok := s[v]
 	return ok
 }
 
 func main() {
-	newSet := Set{}
+
+	newSet := Set[string]{}
 	Add(newSet, "Pouya")
 	Add(newSet, "Ali")
 	Add(newSet, "Ali")
