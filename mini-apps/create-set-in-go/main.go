@@ -22,7 +22,7 @@ func main() {
 	fmt.Println("my set", newSet)
 	fmt.Println("contains", Contains(newSet, "Ali"))
 
-	for k, _ := range newSet {
-		fmt.Println("My set is", k)
+	for s := range newSet {
+		fmt.Println("My set is", s)
 	}
 }
