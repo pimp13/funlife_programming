@@ -28,8 +28,8 @@ func (it *Iterator[V]) Map(f func(V) V) *Iterator[V] {
 }
 
 // Diynamic return type
-func Map[T, U any](it Iterator[T], f func(T) U) Iterator[U] {
-	return Iterator[U]{
+func Map[T, U any](it *Iterator[T], f func(T) U) *Iterator[U] {
+	return &Iterator[U]{
 		seq: func(yield func(U) bool) {
 			for v := range it.seq {
 				if !yield(f(v)) {
@@ -59,6 +59,12 @@ func (it *Iterator[V]) Collect() []V {
 	return slices.Collect(it.seq)
 }
 
+func (it *Iterator[V]) ForEach(f func(V)) {
+	for v := range it.seq {
+		f(v)
+	}
+}
+
 type User struct {
 	ID   uint
 	Name string
@@ -71,7 +77,10 @@ func main() {
 		{Name: "Hassan", ID: 3},
 	}
 	result := From(myUser).
-		Map(func(u User) User { fmt.Printf("user: %s\n", u.Name); return u }).
-		Collect()
+		Map(func(u User) User { fmt.Printf("user: %s\n", u.Name); return u })
+
+	// result := From(myUser)
+
+	// names := Map(result, func(u User) string { return fmt.Sprintf("%s-", u.Name) }).
 	fmt.Println(result)
 }
