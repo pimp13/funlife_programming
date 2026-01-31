@@ -85,6 +85,23 @@ func (it *Iterator[T]) Take(n int) *Iterator[T] {
 	}
 }
 
+func (it *Iterator[T]) Skip(n int) *Iterator[T] {
+	return &Iterator[T]{
+		seq: func(yield func(T) bool) {
+			count := 0
+			for v := range it.seq {
+				if count < n {
+					count++
+					continue
+				}
+				if !yield(v) {
+					return
+				}
+			}
+		},
+	}
+}
+
 type User struct {
 	ID   uint
 	Name string
@@ -97,7 +114,7 @@ func main() {
 		{Name: "Hassan", ID: 3},
 	}
 	result := From(myUser).
-		Take(2).Collect()
+		Skip(2).Collect()
 
 	// result := From(myUser)
 
