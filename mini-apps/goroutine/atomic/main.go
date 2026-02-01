@@ -26,8 +26,17 @@ func main() {
 		go func() {
 			defer wg.Done()
 			counter.Add(1)
+			// newCounter := counter.Add(1)
+			// CompareAndSwap(&counter, &wg)
 		}()
 	}
 	wg.Wait()
 	fmt.Printf("counter is: %d\n", counter.Load())
+}
+
+// Compare and swap (CAS)
+func CompareAndSwap(counter *atomic.Int64, wg *sync.WaitGroup) {
+	defer wg.Done()
+	// Agar meghdar feeli 10 bood bookonesh 20
+	counter.CompareAndSwap(10, 20)
 }
