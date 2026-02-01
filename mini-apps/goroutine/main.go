@@ -54,7 +54,7 @@ func updateOrderStatus(order *Order) {
 	updateMutex.Lock()
 	defer updateMutex.Unlock()
 	currentUpdates := totalUpdates
-	time.Sleep(5 * time.Millisecond)
+	// time.Sleep(5 * time.Millisecond)
 	totalUpdates = currentUpdates + 1
 }
 
