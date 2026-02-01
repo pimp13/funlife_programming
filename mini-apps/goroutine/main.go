@@ -10,6 +10,7 @@ import (
 type Order struct {
 	ID     int
 	Status string
+	mu     sync.Mutex
 }
 
 func generateOrder(count int) []*Order {
@@ -38,9 +39,12 @@ func updateOrderStatuses(orders []*Order) {
 		status := []string{"Processing", "Shipped", "Delivered"}[rand.IntN(3)]
 
 		// WARNING: Data Race
+		// Ok kardan ba Mutex
+		order.mu.Lock()
 		order.Status = status
-
 		fmt.Printf("Update order %d status: %s\n", order.ID, order.Status)
+		order.mu.Unlock()
+
 	}
 }
 
@@ -50,7 +54,6 @@ func reportOrderStatus(orders []*Order) {
 		fmt.Println("\n--- Order Status Report ---")
 
 		for _, order := range orders {
-			// WARNING: Data Race
 			fmt.Printf("Order %d: %s\n", order.ID, order.Status)
 		}
 
@@ -84,8 +87,7 @@ func main() {
 	orders := generateOrder(20)
 
 	var wg sync.WaitGroup
-	wg.Add(3)
-
+	wg.Add(2)
 	go func() {
 		defer wg.Done()
 		processOrders(orders)
@@ -95,13 +97,9 @@ func main() {
 		defer wg.Done()
 		updateOrderStatuses(orders)
 	}()
-
-	go func() {
-		defer wg.Done()
-		reportOrderStatus(orders)
-	}()
-
 	wg.Wait()
+
+	reportOrderStatus(orders)
 
 	fmt.Println("All operations completed. Exiting.")
 }
