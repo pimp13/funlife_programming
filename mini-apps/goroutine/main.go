@@ -67,6 +67,16 @@ func main() {
 
 		baraye daryaft va test kardan warning race condition:
 		go run -race main.go
+
+		Rahe Hal:
+		baraye ok kardan barname be tori ke race condition bartaraf beshe bayad az:
+		Mutex estefadeh kard.
+
+		Rahe Hal Pishrafte tar:
+		estefadeh az channel
+
+		Mutex => Sadeh sarii
+		Channel => Amn tar va memari mehvar tar
 	*/
 	// No Goroutine: ./goroutine-example  0.00s user 0.01s system 0% cpu 14.183 total
 	// Yes Goroutine: ./goroutine-example  0.00s user 0.01s system 0% cpu 5.926 total
