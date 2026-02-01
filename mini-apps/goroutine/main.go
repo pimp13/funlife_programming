@@ -52,10 +52,10 @@ func updateOrderStatus(order *Order) {
 	order.mu.Unlock()
 
 	updateMutex.Lock()
+	defer updateMutex.Unlock()
 	currentUpdates := totalUpdates
 	time.Sleep(5 * time.Millisecond)
 	totalUpdates = currentUpdates + 1
-	updateMutex.Unlock()
 }
 
 func reportOrderStatus(orders []*Order) {
@@ -73,7 +73,10 @@ func reportOrderStatus(orders []*Order) {
 }
 
 func main() {
+	// No Goroutine: ./goroutine-example  0.00s user 0.01s system 0% cpu 14.183 total
+	// Yes Goroutine: ./goroutine-example  0.00s user 0.01s system 0% cpu 5.926 total
 	/*
+		NOTES
 		WARNING: Data Race
 		Choon ke chand goroutine hamzaman daran royae yek data minevisan va mikhonan
 		error va warning race condition bevoojood miyad!!
@@ -82,7 +85,7 @@ func main() {
 		go run -race main.go
 
 		Rahe Hal:
-		baraye ok kardan barname be tori ke race condition bartaraf beshe bayad az:
+		baraye ok kardan barnameh be tori ke race condition bartaraf beshe bayad az:
 		Mutex estefadeh kard.
 
 		Rahe Hal Pishrafte tar:
@@ -91,8 +94,6 @@ func main() {
 		Mutex => Sadeh sarii
 		Channel => Amn tar va memari mehvar tar
 	*/
-	// No Goroutine: ./goroutine-example  0.00s user 0.01s system 0% cpu 14.183 total
-	// Yes Goroutine: ./goroutine-example  0.00s user 0.01s system 0% cpu 5.926 total
 
 	orders := generateOrder(20)
 
