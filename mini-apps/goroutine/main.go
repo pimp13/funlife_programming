@@ -13,6 +13,11 @@ type Order struct {
 	mu     sync.Mutex
 }
 
+var (
+	totalUpdates int
+	updateMutex  sync.Mutex
+)
+
 func generateOrder(count int) []*Order {
 	orders := make([]*Order, count)
 	for i := 0; i < count; i++ {
@@ -31,21 +36,26 @@ func processOrders(orders []*Order) {
 	}
 }
 
-func updateOrderStatuses(orders []*Order) {
-	for _, order := range orders {
-		time.Sleep(
-			time.Duration(rand.IntN(300)) * time.Millisecond,
-		)
-		status := []string{"Processing", "Shipped", "Delivered"}[rand.IntN(3)]
+func updateOrderStatus(order *Order) {
+	order.mu.Lock()
 
-		// WARNING: Data Race
-		// Ok kardan ba Mutex
-		order.mu.Lock()
-		order.Status = status
-		fmt.Printf("Update order %d status: %s\n", order.ID, order.Status)
-		order.mu.Unlock()
+	time.Sleep(
+		time.Duration(rand.IntN(300)) * time.Millisecond,
+	)
+	status := []string{"Processing", "Shipped", "Delivered"}[rand.IntN(3)]
 
-	}
+	// WARNING: Data Race
+	// Ok kardan ba Mutex
+	order.Status = status
+	fmt.Printf("Update order %d status: %s\n", order.ID, order.Status)
+
+	order.mu.Unlock()
+
+	updateMutex.Lock()
+	currentUpdates := totalUpdates
+	time.Sleep(5 * time.Millisecond)
+	totalUpdates = currentUpdates + 1
+	updateMutex.Unlock()
 }
 
 func reportOrderStatus(orders []*Order) {
@@ -87,19 +97,24 @@ func main() {
 	orders := generateOrder(20)
 
 	var wg sync.WaitGroup
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		processOrders(orders)
-	}()
+	wg.Add(3)
+	// go func() {
+	// 	defer wg.Done()
+	// 	processOrders(orders)
+	// }()
 
-	go func() {
-		defer wg.Done()
-		updateOrderStatuses(orders)
-	}()
+	for i := 0; i < 3; i++ {
+		go func() {
+			defer wg.Done()
+			for _, order := range orders {
+				updateOrderStatus(order)
+			}
+		}()
+	}
 	wg.Wait()
 
 	reportOrderStatus(orders)
 
 	fmt.Println("All operations completed. Exiting.")
+	fmt.Printf("Total Updates: %d\n", totalUpdates)
 }
