@@ -24,13 +24,12 @@ func generateOrder(count int) []*Order {
 	return orders
 }
 
-func processOrders(order <-chan *Order, wg *sync.WaitGroup) {
+func processOrders(orderChan <-chan *Order, wg *sync.WaitGroup) {
 	defer wg.Done()
-	// order <- &Order{ID: 3, Status: "hello"}
-	// for _, order := range order {
-	time.Sleep(time.Duration(rand.IntN(500)) * time.Millisecond)
-	fmt.Printf("Processing order %d\n", order)
-	// }
+	for order := range orderChan {
+		time.Sleep(time.Duration(rand.IntN(500)) * time.Millisecond)
+		fmt.Printf("Processing order %d\n", order.ID)
+	}
 }
 
 func main() {
@@ -68,18 +67,21 @@ func main() {
 
 		baraye darvafteh data value az channel:
 		myData := <-myChan
+
+		ch := make(chan string) // no buffer
+		ch := make(chan int, 3) // buffer of size 3
 	*/
 
 	var wg sync.WaitGroup
 	wg.Add(2)
-	orderChan := make(chan *Order)
+	orderChan := make(chan *Order, 20)
 
 	go func() {
 		defer wg.Done()
 		for _, order := range generateOrder(20) {
 			orderChan <- order
 		}
-
+		defer close(orderChan)
 		fmt.Println("Done with generating orders")
 	}()
 
