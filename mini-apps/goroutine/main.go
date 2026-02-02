@@ -13,11 +13,6 @@ type Order struct {
 	mu     sync.Mutex
 }
 
-var (
-	totalUpdates int
-	updateMutex  sync.Mutex
-)
-
 func generateOrder(count int) []*Order {
 	orders := make([]*Order, count)
 	for i := 0; i < count; i++ {
@@ -29,47 +24,13 @@ func generateOrder(count int) []*Order {
 	return orders
 }
 
-func processOrders(orders []*Order) {
-	for _, order := range orders {
-		time.Sleep(time.Duration(rand.IntN(500)) * time.Millisecond)
-		fmt.Printf("Processing order %d\n", order.ID)
-	}
-}
-
-func updateOrderStatus(order *Order) {
-	order.mu.Lock()
-
-	time.Sleep(
-		time.Duration(rand.IntN(300)) * time.Millisecond,
-	)
-	status := []string{"Processing", "Shipped", "Delivered"}[rand.IntN(3)]
-
-	// WARNING: Data Race
-	// Ok kardan ba Mutex
-	order.Status = status
-	fmt.Printf("Update order %d status: %s\n", order.ID, order.Status)
-
-	order.mu.Unlock()
-
-	updateMutex.Lock()
-	defer updateMutex.Unlock()
-	currentUpdates := totalUpdates
-	// time.Sleep(5 * time.Millisecond)
-	totalUpdates = currentUpdates + 1
-}
-
-func reportOrderStatus(orders []*Order) {
-	for i := 0; i < 5; i++ {
-		time.Sleep(1 * time.Second)
-		fmt.Println("\n--- Order Status Report ---")
-
-		for _, order := range orders {
-			fmt.Printf("Order %d: %s\n", order.ID, order.Status)
-		}
-
-		fmt.Println("--------------------")
-		println()
-	}
+func processOrders(order <-chan *Order, wg *sync.WaitGroup) {
+	defer wg.Done()
+	// order <- &Order{ID: 3, Status: "hello"}
+	// for _, order := range order {
+	time.Sleep(time.Duration(rand.IntN(500)) * time.Millisecond)
+	fmt.Printf("Processing order %d\n", order)
+	// }
 }
 
 func main() {
@@ -93,29 +54,38 @@ func main() {
 
 		Mutex => Sadeh sarii
 		Channel => Amn tar va memari mehvar tar
+
+	*/
+	/*
+		Channel:
+		channel ha baraye tabadoole data beiyne goroutine ha estenfadeh mishe
+
+		baraye sakhte channel az dastore make estefadeh mikonim:
+		myChan := make(chan DataType)
+
+		baraye value dadan be channel:
+		myChan <- Data
+
+		baraye darvafteh data value az channel:
+		myData := <-myChan
 	*/
 
-	orders := generateOrder(20)
-
 	var wg sync.WaitGroup
-	wg.Add(3)
-	// go func() {
-	// 	defer wg.Done()
-	// 	processOrders(orders)
-	// }()
+	wg.Add(2)
+	orderChan := make(chan *Order)
 
-	for i := 0; i < 3; i++ {
-		go func() {
-			defer wg.Done()
-			for _, order := range orders {
-				updateOrderStatus(order)
-			}
-		}()
-	}
+	go func() {
+		defer wg.Done()
+		for _, order := range generateOrder(20) {
+			orderChan <- order
+		}
+
+		fmt.Println("Done with generating orders")
+	}()
+
+	go processOrders(orderChan, &wg)
+
 	wg.Wait()
 
-	reportOrderStatus(orders)
-
 	fmt.Println("All operations completed. Exiting.")
-	fmt.Printf("Total Updates: %d\n", totalUpdates)
 }
