@@ -41,7 +41,8 @@ var convertCmd = &cobra.Command{
 	},
 }
 
-func executeConvertCmd(cmd *cobra.Command, args []string) error {
+// argumans: cmd *cobra.Command, args []string
+func executeConvertCmd(_ *cobra.Command, _ []string) error {
 
 	// fire off a request to convert the currency
 	url := fmt.Sprintf(
