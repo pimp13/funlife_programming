@@ -4,10 +4,16 @@ Copyright © 2026 DevPouyaGh <pimp.puma.13@gmail.com>
 package cmd
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/spf13/cobra"
 )
+
+type JokeResponse struct {
+	Joke string `json:"joke"`
+}
 
 // randomCmd represents the random command
 var randomCmd = &cobra.Command{
@@ -28,6 +34,14 @@ func executeRandomCmd(_ *cobra.Command, _ []string) error {
 		return err
 	}
 	defer resp.Body.Close()
+
+	var jokeResponse JokeResponse
+	if err := json.NewDecoder(resp.Body).Decode(&jokeResponse); err != nil {
+		return err
+	}
+
+	fmt.Println("🤓🤡 This Random Geek Joke")
+	fmt.Printf("%s\n", jokeResponse.Joke)
 
 	return nil
 }
