@@ -11,6 +11,14 @@ func TestSit_Assert(t *testing.T) {
 	assert.Equal(t, 1, fixLoc1)
 	assert.Equal(t, 1, foundNotFixLoc1)
 
+	fixLoc3, foundNotFixLoc3 := sit("123", "145")
+	assert.Equal(t, 1, fixLoc3)
+	assert.Equal(t, 0, foundNotFixLoc3)
+
+	fixLoc4, foundNotFixLoc4 := sit("123", "456")
+	assert.Equal(t, 0, fixLoc4)
+	assert.Equal(t, 0, foundNotFixLoc4)
+
 	fixLoc2, foundNotFixLoc2 := sit("123", "123")
 	assert.Equal(t, 3, fixLoc2)
 	assert.Equal(t, 0, foundNotFixLoc2)
