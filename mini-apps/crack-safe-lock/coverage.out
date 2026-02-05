@@ -1,0 +1,16 @@
+mode: set
+crack-safe-lock/main.go:5.60,6.26 1 1
+crack-safe-lock/main.go:6.26,7.18 1 1
+crack-safe-lock/main.go:7.18,9.4 1 1
+crack-safe-lock/main.go:11.2,11.14 1 0
+crack-safe-lock/main.go:14.34,20.30 5 1
+crack-safe-lock/main.go:20.30,21.19 1 1
+crack-safe-lock/main.go:21.19,23.4 1 1
+crack-safe-lock/main.go:23.9,26.4 2 1
+crack-safe-lock/main.go:29.2,30.24 2 1
+crack-safe-lock/main.go:30.24,32.3 1 1
+crack-safe-lock/main.go:34.2,34.24 1 1
+crack-safe-lock/main.go:34.24,35.30 1 1
+crack-safe-lock/main.go:35.30,38.4 2 1
+crack-safe-lock/main.go:41.2,41.23 1 1
+crack-safe-lock/main.go:44.13,46.2 1 0
