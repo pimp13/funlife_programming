@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func removeByTarget[T comparable](slice []T, target T) []T {
 	for i, v := range slice {
 		if v == target {
@@ -40,4 +42,5 @@ func sit(a, b string) (int, int) {
 }
 
 func main() {
+	fmt.Println(sit("123", "123"))
 }
