@@ -15,15 +15,20 @@ func main() {
 	}
 	defer nc.Close()
 
-	subj, err := nc.SubscribeSync("foo")
+	js, err := nc.JetStream()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	msg, err := subj.NextMsg(time.Duration(5 * time.Second))
+	sub, err := js.SubscribeSync("foo")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Got message from first service:\n %s\n", msg.Data)
+	msg, err := sub.NextMsg(5 * time.Second)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Got message:", string(msg.Data))
 }
