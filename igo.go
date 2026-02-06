@@ -1,12 +1,7 @@
 package main
 
-import (
-	"fmt"
-	"math/rand"
-	"time"
-)
+import . "fmt"
 
 func main() {
-	var random = rand.New(rand.NewSource(time.Now().UnixNano()))
-	fmt.Println(random.Float64())
+	Println("Hello")
 }
