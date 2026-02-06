@@ -41,9 +41,17 @@ func main() {
 	// os.Exit(1)
 
 	for _, word := range words {
-		manWord := fmt.Sprintf("من%s", word)
-		if _, exists := wordSet[manWord]; exists {
-			fmt.Printf("Word: %s , ManWord: %s\n", word, manWord)
+		for _, p := range []string{"ما", "من"} {
+			manWord := fmt.Sprintf("%s%s", p, word)
+
+			if _, exists := wordSet[manWord]; exists {
+				// fmt.Printf("Word: %s , ManWord: %s\n", word, manWord)
+				s := fmt.Sprintf("به %s نگو %s. %s تو نیستم", p, word, manWord)
+				if p == "ما" {
+					s = strings.Replace(s, "نیستم", "نیستیم", 1)
+				}
+				fmt.Println(s)
+			}
 		}
 	}
 

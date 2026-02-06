@@ -1,6 +1,6 @@
 module learning
 
-go 1.25.5
+go 1.25.1
 
 require (
 	codeberg.org/go-fonts/liberation v0.5.0 // indirect
