@@ -1,8 +1,22 @@
-#[derive(Debug)]
-struct Order {
-    id: u32,
-    amount: f64,
-    status: String,
+// #[derive(Debug)]
+// struct Order {
+//     id: u32,
+//     amount: f64,
+//     status: String,
+// }
+
+use std::io::Write;
+use std::{fs::OpenOptions, process::Command};
+
+fn run_cmd(cmd: &str, args: &[&str]) {
+    let status = Command::new(cmd)
+        .args(args)
+        .status()
+        .expect("failed to exec command");
+
+    if !status.success() {
+        panic!("command failed: {} {:?}", cmd, args);
+    }
 }
 
 fn main() {
@@ -45,4 +59,22 @@ fn main() {
     //         order.id, order.amount, order.status
     //     )
     // }
+
+    let commit_count = 10;
+    for i in 1..=commit_count {
+        let mut file = OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open("auto_commit")
+            .unwrap();
+
+        writeln!(file, "commit number {}", i).unwrap();
+
+        run_cmd("git", &["add", "."]);
+
+        let msg = format!("auto commit message {}", i);
+        run_cmd("git", &["commit", "-m", &msg]);
+
+        println!("Commit {} is Done!", i);
+    }
 }
