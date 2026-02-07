@@ -1,92 +1,35 @@
-// #[derive(Debug)]
-// struct Order {
-//     id: u32,
-//     amount: f64,
-//     status: String,
-// }
+struct Book {
+    title: String,
+    author: String,
+}
 
-// use std::io::Write;
-// use std::{fs::OpenOptions, process::Command};
-
-// fn run_cmd(cmd: &str, args: &[&str]) {
-//     let status = Command::new(cmd)
-//         .args(args)
-//         .status()
-//         .expect("failed to exec command");
-
-//     if !status.success() {
-//         panic!("command failed: {} {:?}", cmd, args);
-//     }
-// }
+impl Book {
+    fn print_info(self) {
+        println!("TitleBook: {}, Author: {}", self.title, self.author);
+    }
+}
 
 fn main() {
-    // let numbers = vec![1, 2, 3, 4, 5];
+    println!("Hi, my name is Pouya im programmer i love Golang, Rust, Python and Typescript.");
 
-    // let mut iter = numbers.iter();
-    // println!("{:?}", iter.next());
-    // println!("{:?}", iter.next());
-    // println!("{:?}", iter.next());
-    // println!("{:?}", iter.next());
-    // println!("{:?}", iter.next());
-    // println!("{:?}", iter.next());
+    // Lifetime in rust
+    /*
+    error mideh: borrowed value does not live long enough
+    dar code payien variable z tarif shode va dar scoop variable x tarif shode
+    va refrence x ro yani meghdar x ro daram mirizam dar z
+    vali error mideh chon ke meghdar x ziyad zendeh nemimofe va chon dar scoop hast sari mimire
 
-    // let orders = vec![
-    //     Order {
-    //         id: 1,
-    //         amount: 120.0,
-    //         status: String::from("Complited"),
-    //     },
-    //     Order {
-    //         id: 2,
-    //         amount: 320.0,
-    //         status: String::from("Pending"),
-    //     },
-    //     Order {
-    //         id: 3,
-    //         amount: 240.0,
-    //         status: String::from("Complited"),
-    //     },
-    // ];
-
-    // let complited_order: Vec<&Order> = orders
-    //     .iter()
-    //     .filter(|order| order.status == "Complited")
-    //     .collect();
-
-    // for order in complited_order {
-    //     println!(
-    //         "OrderID: {} , Amount: ${} , Status: {}",
-    //         order.id, order.amount, order.status
-    //     )
+    life time ba <'a> tarif mishe
+     */
+    // let z;
+    // {
+    //     let x = 42;
+    //     z = &x;
     // }
 
-    // let commit_count = 10;
-    // for i in 1..=commit_count {
-    //     let mut file = OpenOptions::new()
-    //         .create(true)
-    //         .append(true)
-    //         .open("auto_commit")
-    //         .unwrap();
-
-    //     writeln!(file, "commit number {}", i).unwrap();
-
-    //     run_cmd("git", &["add", "."]);
-
-    //     let msg = format!("auto commit message {}", i);
-    //     run_cmd("git", &["commit", "-m", &msg]);
-
-    //     println!("Commit {} is Done!", i);
-    // }
-
-    // let payments = vec![100.2, 30.3, 232.0, 100.0, 50.0, 550.0, 43.3];
-    // let first_three: Vec<f64> = payments.iter().take(3).cloned().collect();
-    // println!("{:#?}", first_three);
-
-    let range: Vec<u64> = (1..1_000_000).collect();
-    // let mut sum: u64 = 0;
-    // for i in range {
-    //     sum += i;
-    // }
-    let sum: u64 = range.iter().sum();
-    println!("{}", sum);
+    let my_book = Book {
+        title: String::from("First My Book"),
+        author: String::from("DevPouyaGh"),
+    };
+    my_book.print_info();
 }
