@@ -1,13 +1,13 @@
-struct Book {
-    title: String,
-    author: String,
-}
+// struct Book {
+//     title: String,
+//     author: String,
+// }
 
-impl Book {
-    fn print_info(self) {
-        println!("TitleBook: {}, Author: {}", self.title, self.author);
-    }
-}
+// impl Book {
+//     fn print_info(self) {
+//         println!("TitleBook: {}, Author: {}", self.title, self.author);
+//     }
+// }
 
 fn main() {
     println!("Hi, my name is Pouya im programmer i love Golang, Rust, Python and Typescript.");
@@ -27,9 +27,9 @@ fn main() {
     //     z = &x;
     // }
 
-    let my_book = Book {
-        title: String::from("First My Book"),
-        author: String::from("DevPouyaGh"),
-    };
-    my_book.print_info();
+    // let my_book = Book {
+    //     title: String::from("First My Book"),
+    //     author: String::from("DevPouyaGh"),
+    // };
+    // my_book.print_info();
 }
