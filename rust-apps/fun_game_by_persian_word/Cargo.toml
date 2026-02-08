@@ -1,0 +1,6 @@
+[package]
+name = "fun_game_by_persian_word"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
