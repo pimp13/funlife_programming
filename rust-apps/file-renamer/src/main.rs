@@ -9,7 +9,9 @@ fn main() {
         if let Some(file_name) = path.file_name().and_then(|n| n.to_str()) {
             let new_name = file_name.trim().to_lowercase().replace(" ", "_");
 
-            println!("filename: {:?} new filename: {}", file_name, new_name);
+            let new_path = path.with_file_name(new_name);
+
+            fs::rename(&path, &new_path).unwrap();
         }
     }
 }
