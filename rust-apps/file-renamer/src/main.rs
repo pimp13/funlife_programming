@@ -1,8 +1,16 @@
 use std::fs;
 
-fn main() {
-    let dir = "./test-file";
+use clap::{Arg, Command};
 
+fn main() {
+    let matches = Command::new("File Renamer")
+        .about("Rename to standard name for your files")
+        .version("v1.0.0")
+        .author("pimp.puma.13@gmail.com")
+        .arg(Arg::new("dir").alias("d").required(true).index(1))
+        .get_matches();
+
+    let dir = matches.get_one::<String>("dir").unwrap();
     for entry in fs::read_dir(dir).unwrap() {
         let path = entry.unwrap().path();
 
