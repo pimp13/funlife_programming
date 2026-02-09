@@ -14,13 +14,14 @@ func Run(args []string) {
 	fs.Parse(args)
 
 	files := fs.Args()
-	for len(files) == 0 {
-		printFromReader(os.Stdin, isShowLineNumber)
-	}
 
-	for _, file := range files {
-		if err := printFile(file, isShowLineNumber); err != nil {
-			log.Fatalln(err)
+	if len(files) == 0 {
+		printFromReader(os.Stdin, isShowLineNumber)
+	} else {
+		for _, file := range files {
+			if err := printFile(file, isShowLineNumber); err != nil {
+				log.Fatalln(err)
+			}
 		}
 	}
 }
@@ -56,12 +57,18 @@ func printFromReader(reader *os.File, isShowLineNumber *bool) {
 		BgBlue: \033[44m
 		BgCyan: \033[46m
 	*/
-	fmt.Printf("> \033[32mThis is file name: %s\033[0m\n\n", reader.Name())
+
+	if reader == os.Stdin {
+		fmt.Printf("> \033[32mReading from stdin\033[0m\n\n")
+	} else {
+		fmt.Printf("> \033[32mThis is file name: %s\033[0m\n\n", reader.Name())
+	}
 
 	lineCounter := 1
 	for scanner.Scan() {
 		if *isShowLineNumber {
-			fmt.Printf("%6d | %s\n", lineCounter, scanner.Text())
+			fmt.Printf("\033[2m%6d\033[0m | %s\n", lineCounter, scanner.Text())
+			lineCounter++
 		} else {
 			fmt.Println(scanner.Text())
 		}
