@@ -1,0 +1,1 @@
+/home/pouya/w/funlife_programming/simple-orm-rust/target/debug/simple-orm-rust: /home/pouya/w/funlife_programming/simple-orm-rust/src/main.rs /home/pouya/w/funlife_programming/simple-orm-rust/src/query/builder.rs /home/pouya/w/funlife_programming/simple-orm-rust/src/query/mod.rs
