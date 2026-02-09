@@ -1,0 +1,7 @@
+/home/pouya/w/funlife_programming/rust-apps/simple-grep/target/debug/deps/strsim-817aa286a9f20c0c.d: /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/strsim-0.11.1/src/lib.rs
+
+/home/pouya/w/funlife_programming/rust-apps/simple-grep/target/debug/deps/libstrsim-817aa286a9f20c0c.rlib: /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/strsim-0.11.1/src/lib.rs
+
+/home/pouya/w/funlife_programming/rust-apps/simple-grep/target/debug/deps/libstrsim-817aa286a9f20c0c.rmeta: /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/strsim-0.11.1/src/lib.rs
+
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/strsim-0.11.1/src/lib.rs:
