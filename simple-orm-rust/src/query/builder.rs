@@ -79,8 +79,28 @@ impl QueryBuilder {
         let mut params = Vec::new();
 
         if !self.condition.is_empty() {
-            let parts: Vec<String> = self.condition.iter()
+            let parts: Vec<String> = self
+                .condition
+                .iter()
+                .enumerate()
+                .map(|(i, c)| {
+                    params.push(c.value.clone());
+                    c.to_sql(i + 1)
+                })
+                .collect();
+
+            sql.push_str(" WHERE ");
+            sql.push_str(&parts.join(" AND "));
         }
 
+        if let Some((field, dir)) = &self.order_by {
+            sql.push_str(&format!(" ORDER BY {} {}", field, dir));
+        }
+
+        if let Some(limit) = self.limit {
+            sql.push_str(&format!(" LIMIT {}", limit));
+        }
+
+        (sql, params)
     }
 }
