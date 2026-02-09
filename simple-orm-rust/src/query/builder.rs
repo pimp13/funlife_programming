@@ -35,3 +35,52 @@ pub struct QueryBuilder {
     order_by: Option<(String, String)>,
     limit: Option<u32>,
 }
+
+impl QueryBuilder {
+    pub fn new(table: &str) -> Self {
+        QueryBuilder {
+            table: table.to_string(),
+            condition: Vec::new(),
+            order_by: None,
+            limit: None,
+        }
+    }
+
+    pub fn where_eq(mut self, field: &str, value: &str) -> Self {
+        self.condition.push(Condition {
+            field: field.to_string(),
+            operator: Operator::Eq,
+            value: value.to_string(),
+        });
+        self
+    }
+
+    pub fn where_gt(mut self, field: &str, value: &str) -> Self {
+        self.condition.push(Condition {
+            field: field.to_string(),
+            operator: Operator::Gt,
+            value: value.to_string(),
+        });
+        self
+    }
+
+    pub fn order_by(mut self, field: &str, dir: &str) -> Self {
+        self.order_by = Some((field.to_string(), dir.to_string()));
+        self
+    }
+
+    pub fn limit(mut self, limit: u32) -> Self {
+        self.limit = Some(limit);
+        self
+    }
+
+    pub fn build(&self) -> (String, Vec<String>) {
+        let mut sql = format!("SELECT * FROM {}", self.table);
+        let mut params = Vec::new();
+
+        if !self.condition.is_empty() {
+            let parts: Vec<String> = self.condition.iter()
+        }
+
+    }
+}
