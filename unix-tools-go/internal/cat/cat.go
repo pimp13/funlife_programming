@@ -4,11 +4,24 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"log"
 	"os"
+
+	"golang.org/x/term"
 )
 
+var width int
+
 func Run(args []string) {
+	var err error
+	// width, _, err = term.GetSize(int(syscall.Stdin))
+	width, _, err = term.GetSize(int(os.Stdout.Fd()))
+	if err != nil {
+		width = 80
+		// fmt.Fprintf(os.Stderr, "cat: error reading input: %v\n", err)
+		// os.Exit(1)
+	}
+	fmt.Println("term w =>", width)
+
 	fs := flag.NewFlagSet("cat", flag.ExitOnError)
 	isShowLineNumber := fs.Bool("n", false, "print by line numbers")
 	fs.Parse(args)
@@ -20,7 +33,8 @@ func Run(args []string) {
 	} else {
 		for _, file := range files {
 			if err := printFile(file, isShowLineNumber); err != nil {
-				log.Fatalln(err)
+				fmt.Fprintf(os.Stderr, "cat: error reading input: %v\n", err)
+				os.Exit(1)
 			}
 		}
 	}
@@ -61,13 +75,15 @@ func printFromReader(reader *os.File, isShowLineNumber *bool) {
 	if reader == os.Stdin {
 		fmt.Printf("> \033[32mReading from stdin\033[0m\n\n")
 	} else {
+
+		println()
 		fmt.Printf("> \033[32mThis is file name: %s\033[0m\n\n", reader.Name())
 	}
 
 	lineCounter := 1
 	for scanner.Scan() {
 		if *isShowLineNumber {
-			fmt.Printf("\033[2m%6d\033[0m | %s\n", lineCounter, scanner.Text())
+			fmt.Printf("\033[2m%6d\033[0m │ %s\n", lineCounter, scanner.Text())
 			lineCounter++
 		} else {
 			fmt.Println(scanner.Text())
