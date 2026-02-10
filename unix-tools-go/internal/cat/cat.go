@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"golang.org/x/term"
 )
@@ -20,7 +21,6 @@ func Run(args []string) {
 		// fmt.Fprintf(os.Stderr, "cat: error reading input: %v\n", err)
 		// os.Exit(1)
 	}
-	fmt.Println("term w =>", width)
 
 	fs := flag.NewFlagSet("cat", flag.ExitOnError)
 	isShowLineNumber := fs.Bool("n", false, "print by line numbers")
@@ -75,15 +75,21 @@ func printFromReader(reader *os.File, isShowLineNumber *bool) {
 	if reader == os.Stdin {
 		fmt.Printf("> \033[32mReading from stdin\033[0m\n\n")
 	} else {
-
-		println()
-		fmt.Printf("> \033[32mThis is file name: %s\033[0m\n\n", reader.Name())
+		// fmt.Println(
+		// 	strings.Repeat("──", width),
+		// )
+		fmt.Printf("\033[2m%s\033[0m\n", strings.Repeat("─", width-1))
+		print("\tFile: ")
+		fmt.Printf(
+			"\033[32m%s\033[0m\n", reader.Name(),
+		)
+		fmt.Printf("\033[2m%s\033[0m\n", strings.Repeat("─", width-1))
 	}
 
 	lineCounter := 1
 	for scanner.Scan() {
 		if *isShowLineNumber {
-			fmt.Printf("\033[2m%6d\033[0m │ %s\n", lineCounter, scanner.Text())
+			fmt.Printf("\033[2m%6d │\033[0m %s\n", lineCounter, scanner.Text())
 			lineCounter++
 		} else {
 			fmt.Println(scanner.Text())
