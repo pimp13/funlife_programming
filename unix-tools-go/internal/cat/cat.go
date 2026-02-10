@@ -92,7 +92,7 @@ func printFromReader(reader *os.File, isShowLineNumber *bool) {
 			fmt.Printf("\033[2m%6d │\033[0m %s\n", lineCounter, scanner.Text())
 			lineCounter++
 		} else {
-			fmt.Println(scanner.Text())
+			fmt.Printf("\t%s\n", scanner.Text())
 		}
 	}
 	if err := scanner.Err(); err != nil {
