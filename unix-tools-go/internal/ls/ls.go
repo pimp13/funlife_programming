@@ -32,9 +32,20 @@ func Run(args []string) {
 		printTotalBlocks(entries)
 
 	} else {
-
+		printMultiColumn(entries)
 	}
 
+}
+
+func printMultiColumn(entries []os.DirEntry) {
+	for _, entry := range entries {
+		if entry.IsDir() {
+			fmt.Printf("\033[1m\033[36m%s\033[0m  ", entry.Name())
+		} else {
+			fmt.Printf("%s  ", entry.Name())
+		}
+	}
+	println()
 }
 
 func printTotalBlocks(entries []os.DirEntry) {
