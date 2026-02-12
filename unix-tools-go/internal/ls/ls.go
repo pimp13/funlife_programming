@@ -6,6 +6,8 @@ import (
 	"os"
 	"sort"
 	"syscall"
+
+	"golang.org/x/term"
 )
 
 func Run(args []string) {
@@ -38,6 +40,13 @@ func Run(args []string) {
 }
 
 func printMultiColumn(entries []os.DirEntry) {
+	width, _, err := term.GetSize(int(os.Stdout.Fd()))
+	if err != nil {
+		width = 60
+	}
+
+	var names []string
+
 	for _, entry := range entries {
 		if entry.IsDir() {
 			fmt.Printf("\033[1m\033[36m%s\033[0m  ", entry.Name())
