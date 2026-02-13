@@ -47,7 +47,6 @@ func Run(args []string) {
 type Entry struct {
 	IsDir bool
 	Name  string
-	E     os.DirEntry
 }
 
 func printMultiColumn(entries []os.DirEntry) {
@@ -59,9 +58,9 @@ func printMultiColumn(entries []os.DirEntry) {
 	entryT := make([]*Entry, len(entries))
 	var maxLen int
 	for i, entry := range entries {
-		name := entry.Name()
+		name := getFilenameWithColor(entry)
 		isDir := entry.IsDir()
-		entryT[i] = &Entry{IsDir: isDir, Name: name, E: entry}
+		entryT[i] = &Entry{IsDir: isDir, Name: name}
 		if len(name) > maxLen {
 			maxLen = len(name)
 		}
@@ -74,12 +73,7 @@ func printMultiColumn(entries []os.DirEntry) {
 	}
 
 	for i, e := range entryT {
-		if e.IsDir {
-			fmt.Printf("\033[1m\033[32m%-*s\033[0m", colWidth, e.Name)
-		} else {
-			fmt.Printf("%-*s", colWidth, e.Name)
-		}
-		// fmt.Printf("%-*s ", colWidth, getFilenameWithColor(e.E))
+		fmt.Printf("%-*s", colWidth, e.Name)
 		if (i+1)%cols == 0 || i == len(entryT)-1 {
 			println()
 		}
