@@ -39,22 +39,45 @@ func Run(args []string) {
 
 }
 
+type Entry struct {
+	IsDir bool
+	Name  string
+}
+
 func printMultiColumn(entries []os.DirEntry) {
 	width, _, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
 		width = 60
 	}
 
-	var names []string
-
-	for _, entry := range entries {
-		if entry.IsDir() {
-			fmt.Printf("\033[1m\033[36m%s\033[0m  ", entry.Name())
-		} else {
-			fmt.Printf("%s  ", entry.Name())
+	entryT := make([]*Entry, len(entries))
+	var maxLen int
+	for i, entry := range entries {
+		name := entry.Name()
+		isDir := entry.IsDir()
+		entryT[i] = &Entry{IsDir: isDir, Name: name}
+		if len(name) > maxLen {
+			maxLen = len(name)
 		}
 	}
-	println()
+
+	colWidth := maxLen + 2
+	cols := width / colWidth
+	if cols == 0 {
+		cols = 1
+	}
+
+	for i, e := range entryT {
+		if e.IsDir {
+			fmt.Printf("\033[1m\033[36m%-*s\033[0m", colWidth, e.Name)
+		} else {
+			fmt.Printf("%-*s", colWidth, e.Name)
+		}
+		if (i+1)%cols == 0 || i == len(entryT)-1 {
+			println()
+		}
+	}
+
 }
 
 func printTotalBlocks(entries []os.DirEntry) {
