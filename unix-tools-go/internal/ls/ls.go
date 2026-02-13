@@ -47,6 +47,7 @@ func Run(args []string) {
 type Entry struct {
 	IsDir bool
 	Name  string
+	E     os.DirEntry
 }
 
 func printMultiColumn(entries []os.DirEntry) {
@@ -60,7 +61,7 @@ func printMultiColumn(entries []os.DirEntry) {
 	for i, entry := range entries {
 		name := entry.Name()
 		isDir := entry.IsDir()
-		entryT[i] = &Entry{IsDir: isDir, Name: name}
+		entryT[i] = &Entry{IsDir: isDir, Name: name, E: entry}
 		if len(name) > maxLen {
 			maxLen = len(name)
 		}
@@ -74,10 +75,11 @@ func printMultiColumn(entries []os.DirEntry) {
 
 	for i, e := range entryT {
 		if e.IsDir {
-			fmt.Printf("\033[1m\033[36m%-*s\033[0m", colWidth, e.Name)
+			fmt.Printf("\033[1m\033[32m%-*s\033[0m", colWidth, e.Name)
 		} else {
 			fmt.Printf("%-*s", colWidth, e.Name)
 		}
+		// fmt.Printf("%-*s ", colWidth, getFilenameWithColor(e.E))
 		if (i+1)%cols == 0 || i == len(entryT)-1 {
 			println()
 		}
@@ -148,7 +150,14 @@ func printLongEntry(entry os.DirEntry) {
 		grp.Name,
 		info.Size(),
 		info.ModTime().Format(timeFormat),
-		entry.Name(),
+		getFilenameWithColor(entry),
 	)
 
+}
+
+func getFilenameWithColor(entry os.DirEntry) string {
+	if entry.IsDir() {
+		return fmt.Sprintf("\033[1m\033[32m%s\033[0m", entry.Name())
+	}
+	return entry.Name()
 }
