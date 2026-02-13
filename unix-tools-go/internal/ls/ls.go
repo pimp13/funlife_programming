@@ -34,6 +34,9 @@ func Run(args []string) {
 
 	if *longFormat {
 		printTotalBlocks(entries)
+		for _, entry := range entries {
+			printLongEntry(entry)
+		}
 
 	} else {
 		printMultiColumn(entries)
