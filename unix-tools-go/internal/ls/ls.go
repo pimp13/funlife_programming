@@ -4,8 +4,10 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/user"
 	"sort"
 	"syscall"
+	"time"
 
 	"golang.org/x/term"
 )
@@ -105,6 +107,45 @@ func printLongEntry(entry os.DirEntry) {
 
 	stat := info.Sys().(*syscall.Stat_t)
 	perms := info.Mode().Perm().String()
-	
+
+	if info.IsDir() {
+		perms = "d" + perms[1:]
+	} else {
+		perms = "-" + perms[1:]
+	}
+
+	uid := fmt.Sprint(stat.Uid)
+	gid := fmt.Sprint(stat.Gid)
+
+	usr, err := user.LookupId(uid)
+	if err != nil {
+		usr = &user.User{Username: uid}
+	}
+
+	grp, err := user.LookupGroupId(gid)
+	if err != nil {
+		grp = &user.Group{Name: gid}
+	}
+
+	// Determine which time format to use for modification time display
+	var timeFormat string
+	sixMonths := time.Hour * 24 * 30 * 6 // approximate 6 months as 180 days
+
+	if time.Since(info.ModTime()) > sixMonths || info.ModTime().After(time.Now()) {
+		timeFormat = "Jan _2 2006"
+	} else {
+		timeFormat = "Jan _2 15:04"
+	}
+
+	// Print the long entry format, matching typical 'ls -l'
+	fmt.Printf("%s %3d %s %s %8d %s %s\n",
+		perms,
+		stat.Nlink,
+		usr.Username,
+		grp.Name,
+		info.Size(),
+		info.ModTime().Format(timeFormat),
+		entry.Name(),
+	)
 
 }
