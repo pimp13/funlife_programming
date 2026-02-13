@@ -95,3 +95,16 @@ func printTotalBlocks(entries []os.DirEntry) {
 
 	fmt.Printf("total %dK\n", totalBlocks/2)
 }
+
+func printLongEntry(entry os.DirEntry) {
+	info, err := entry.Info()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "ls: error reading file info: %v\n", err)
+		return
+	}
+
+	stat := info.Sys().(*syscall.Stat_t)
+	perms := info.Mode().Perm().String()
+	
+
+}
