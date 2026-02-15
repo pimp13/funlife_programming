@@ -39,7 +39,7 @@ func GenerateShortURL(originalURL, userID string) string {
 	short := base62.Encode([]byte(fmt.Sprintf("%d", num)))
 
 	if len(short) > 10 {
-		short = short[:10]
+		short = short[:8]
 	}
 
 	return string(short)

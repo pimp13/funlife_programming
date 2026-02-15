@@ -17,7 +17,7 @@ func TestGenerateShortURL(t *testing.T) {
 	// fmt.Println(shortLink_1, shortLink_2)
 	// zYDM4gjM4M 4ADN2MzNwM
 
-	assert.Equal(t, "zYDM4gjM4M", shortLink_1)
-	assert.Equal(t, "4ADN2MzNwM", shortLink_2)
+	assert.Equal(t, "zYDM4gjM", shortLink_1)
+	assert.Equal(t, "4ADN2MzN", shortLink_2)
 
 }
