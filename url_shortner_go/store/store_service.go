@@ -41,19 +41,17 @@ func initStoreService() *StoreService {
 }
 
 func SaveUrlMapping(shortUrl, longUrl, userId string) {
-	s := initStoreService()
 	key := shortUrl
 	value := longUrl
-	if err := s.redisClient.Set(ctx, key, value, CacheDuration).Err(); err != nil {
+	if err := storeService.redisClient.Set(ctx, key, value, CacheDuration).Err(); err != nil {
 		log.Printf("ERR: Failed to save URL mapping: %v\n", err)
 	}
 }
 
-func GetUrlMapping(shortUrl string) string {
-	s := initStoreService()
-	result := s.redisClient.Get(ctx, shortUrl)
-	if result.Err() != nil {
-		log.Printf("ERR: Failed to get URL mapping: %v\n", result.Err())
+func RetrieveInitialUrl(shortUrl string) string {
+	result, err := storeService.redisClient.Get(ctx, shortUrl).Result()
+	if err != nil {
+		log.Printf("ERR: Failed to get URL mapping: %v\n", err)
 	}
-	return result.Val()
+	return result
 }

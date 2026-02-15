@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"url_shortner_go/store"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +20,7 @@ func main() {
 	})
 
 	// store.SaveUrlMapping("https://apophis.ir", "https://ap.ir", "h4312fs")
-	log.Println(store.GetUrlMapping("https://apophis.ir"))
+	// log.Println(store.GetUrlMapping("https://apophis.ir"))
 
 	log.Printf("INF: server is running on port %s\n", PORT)
 	if err := r.Run(fmt.Sprintf("0.0.0.0%s", PORT)); err != nil {
