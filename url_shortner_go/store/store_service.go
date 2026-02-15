@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -40,12 +41,13 @@ func initStoreService() *StoreService {
 	return &storeService
 }
 
-func SaveUrlMapping(shortUrl, longUrl, userId string) {
+func SaveUrlMapping(shortUrl, longUrl, userId string) error {
 	key := shortUrl
 	value := longUrl
 	if err := storeService.redisClient.Set(ctx, key, value, CacheDuration).Err(); err != nil {
-		log.Printf("ERR: Failed to save URL mapping: %v\n", err)
+		return fmt.Errorf("ERR: Failed to save URL mapping: %s", err.Error())
 	}
+	return nil
 }
 
 func RetrieveInitialUrl(shortUrl string) string {
