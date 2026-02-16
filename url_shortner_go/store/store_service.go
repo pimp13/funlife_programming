@@ -21,7 +21,7 @@ var (
 	storeService = StoreService{}
 )
 
-func initStoreService() *StoreService {
+func InitStoreService() *StoreService {
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",

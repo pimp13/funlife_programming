@@ -9,7 +9,7 @@ import (
 var testStoreService *StoreService
 
 func init() {
-	testStoreService = initStoreService()
+	testStoreService = InitStoreService()
 }
 
 func TestInsertaionAndRetrieve(t *testing.T) {
