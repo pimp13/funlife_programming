@@ -42,5 +42,10 @@ func CreateShortURL(c *gin.Context) {
 			"short_url": fmt.Sprintf("%s/%s", BASE_URL, shortUrl),
 		},
 	})
+}
 
+func HandleShortURLRedirect(c *gin.Context) {
+	shortURL := c.Param("url")
+	initURL := store.RetrieveInitialUrl(shortURL)
+	c.Redirect(http.StatusPermanentRedirect, initURL)
 }
