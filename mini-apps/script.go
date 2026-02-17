@@ -34,8 +34,22 @@ func main() {
 	// logger.Warn("hi this is warning log")
 	// log.Println("ok")
 
-	port := cmp.Or(getFromEnv(), getPortFromFlag(), "7070")
+	port := cmp.Or(
+		getFromEnv(),
+		getPortFromFlag(),
+		"7070",
+	)
 	fmt.Println("application start on port:", port)
+
+	// ternary operator
+	age := 22
+	canDrink := func() string {
+		if age >= 18 {
+			return "Yes"
+		}
+		return "No"
+	}()
+	fmt.Println("can drink ?", canDrink)
 }
 
 func getPortFromFlag() string {
