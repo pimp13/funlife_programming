@@ -1,8 +1,8 @@
 package main
 
 import (
-	"log"
-	"log/slog"
+	"cmp"
+	"fmt"
 	"os"
 )
 
@@ -26,11 +26,22 @@ func main() {
 	// fmt.Println(strFormatedPrice)
 
 	// slog.SetLogLoggerLevel(slog.LevelDebug)
-	logger := slog.New(
-		slog.NewJSONHandler(os.Stdout, nil),
-	)
-	logger.Debug("hello this is debug log")
-	logger.Info("hello this is info log")
-	logger.Warn("hi this is warning log")
-	log.Println("ok")
+	// logger := slog.New(
+	// 	slog.NewJSONHandler(os.Stdout, nil),
+	// )
+	// logger.Debug("hello this is debug log")
+	// logger.Info("hello this is info log")
+	// logger.Warn("hi this is warning log")
+	// log.Println("ok")
+
+	port := cmp.Or(getFromEnv(), getPortFromFlag(), "7070")
+	fmt.Println("application start on port:", port)
+}
+
+func getPortFromFlag() string {
+	return "8080"
+}
+
+func getFromEnv() string {
+	return os.Getenv("PORT")
 }
