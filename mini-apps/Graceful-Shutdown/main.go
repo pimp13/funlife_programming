@@ -17,7 +17,7 @@ func createServer() *http.Server {
 
 	mux.HandleFunc("/slow", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Slow request is called")
-		time.Sleep(8 * time.Second)
+		time.Sleep(10 * time.Second)
 		fmt.Fprintf(w, "Slow request completed at %v\n", time.Now())
 	})
 
@@ -55,13 +55,11 @@ func runServer(
 		log.Println("🛑 Shutdown signal received...")
 	case <-ctx.Done():
 		log.Println("Context cancelled.")
-	case <-time.After(shutdownTimeout):
-		log.Println("Timeout shutdown server.")
 	}
 
 	// Handle the realy shutdown the server
-	// shutdownCtx, cancel := context.WithTimeout(ctx, shutdownTimeout)
-	shutdownCtx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
+	shutdownCtx, cancel := context.WithTimeout(ctx, shutdownTimeout)
+	// shutdownCtx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
 	defer cancel()
 	if err := server.Shutdown(shutdownCtx); err != nil {
 		if closeErr := server.Close(); closeErr != nil {
@@ -70,13 +68,14 @@ func runServer(
 		return err
 	}
 
+	log.Println("Server exited gracefully.")
 	return nil
 }
 
 func main() {
 	server := createServer()
 
-	if err := runServer(context.Background(), server, 2*time.Second); err != nil {
+	if err := runServer(context.Background(), server, 1*time.Second); err != nil {
 		log.Fatalf("RunServerError: %v", err)
 	}
 }
