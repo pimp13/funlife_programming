@@ -3,7 +3,7 @@ package main
 import (
 	"cmp"
 	"fmt"
-	"os"
+	"strings"
 )
 
 const (
@@ -34,28 +34,41 @@ func main() {
 	// logger.Warn("hi this is warning log")
 	// log.Println("ok")
 
-	port := cmp.Or(
-		getFromEnv(),
-		getPortFromFlag(),
-		"7070",
-	)
-	fmt.Println("application start on port:", port)
+	// port := cmp.Or(
+	// 	getFromEnv(),
+	// 	getPortFromFlag(),
+	// 	"7070",
+	// )
+	// fmt.Println("application start on port:", port)
 
 	// ternary operator
-	age := 22
-	canDrink := func() string {
-		if age >= 18 {
-			return "Yes"
-		}
-		return "No"
-	}()
-	fmt.Println("can drink ?", canDrink)
+	// age := 22
+	// canDrink := func() string {
+	// 	if age >= 18 {
+	// 		return "Yes"
+	// 	}
+	// 	return "No"
+	// }()
+	// fmt.Println("can drink ?", canDrink)
+
+	userName := cmp.Or(
+		getUserNameFromInput(),
+		"Anonymous",
+	)
+	fmt.Printf("Hello %s welcome to secret panel :)\n", userName)
 }
 
-func getPortFromFlag() string {
-	return "8080"
-}
+// func getPortFromFlag() string {
+// 	return "8080"
+// }
 
-func getFromEnv() string {
-	return os.Getenv("PORT")
+// func getFromEnv() string {
+// 	return os.Getenv("PORT")
+// }
+
+func getUserNameFromInput() string {
+	fmt.Print("Enter your name (or press enter to use 'Anonymous'): ")
+	var name string
+	fmt.Scanln(&name)
+	return strings.TrimSpace(name)
 }
