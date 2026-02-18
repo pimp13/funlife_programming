@@ -3,7 +3,7 @@ package main
 import (
 	"cmp"
 	"fmt"
-	"strings"
+	"slices"
 )
 
 const (
@@ -51,11 +51,45 @@ func main() {
 	// }()
 	// fmt.Println("can drink ?", canDrink)
 
-	userName := cmp.Or(
-		getUserNameFromInput(),
-		"Anonymous",
+	// userName := cmp.Or(
+	// 	getUserNameFromInput(),
+	// 	"Anonymous",
+	// )
+	// fmt.Printf("Hello %s welcome to secret panel :)\n", userName)
+
+	employees := []employee{
+		{name: "Pouya", age: 23},
+		{name: "Ali", age: 22},
+		{name: "Mona", age: 18},
+		{name: "Hassan", age: 35},
+		{name: "Behnam", age: 22},
+	}
+	fmt.Println("Employess before sorting:")
+	fmt.Println(employees)
+
+	fmt.Println("Employess after sorting:")
+	fmt.Println(sortEmployees(employees))
+
+}
+
+type employee struct {
+	name string
+	age  uint
+}
+
+func sortEmployees(employees []employee) []employee {
+	sortedEmployess := employees
+	slices.SortFunc(
+		sortedEmployess,
+		func(a, b employee) int {
+			return cmp.Or(
+				cmp.Compare(a.age, b.age),
+				cmp.Compare(a.name, b.name),
+			)
+		},
 	)
-	fmt.Printf("Hello %s welcome to secret panel :)\n", userName)
+
+	return sortedEmployess
 }
 
 // func getPortFromFlag() string {
@@ -66,9 +100,9 @@ func main() {
 // 	return os.Getenv("PORT")
 // }
 
-func getUserNameFromInput() string {
-	fmt.Print("Enter your name (or press enter to use 'Anonymous'): ")
-	var name string
-	fmt.Scanln(&name)
-	return strings.TrimSpace(name)
-}
+// func getUserNameFromInput() string {
+// 	fmt.Print("Enter your name (or press enter to use 'Anonymous'): ")
+// 	var name string
+// 	fmt.Scanln(&name)
+// 	return strings.TrimSpace(name)
+// }
