@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/mail"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -13,10 +14,16 @@ type User struct {
 	Email string `validate:"required,email"`
 }
 
+// faghat yee bar complie mikonim baraye behineh boodan
+var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+
 func isValidEmail(email string) bool {
-	pattern := `^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`
-	re := regexp.MustCompile(pattern)
-	return re.MatchString(email)
+	return emailRegex.MatchString(email)
+}
+
+func isValidEmailByStdLib(email string) bool {
+	_, err := mail.ParseAddress(email)
+	return err == nil
 }
 
 func validate(val any) []error {
@@ -86,7 +93,7 @@ func main() {
 
 	invalidUser := User{
 		Name:  "abc",
-		Email: "abc@abc.co",
+		Email: "abc@sf.",
 	}
 
 	if err := validate(user); err != nil {
