@@ -92,8 +92,8 @@ func main() {
 	}
 
 	invalidUser := User{
-		Name:  "abc",
-		Email: "abc@sf.",
+		Name:  "a",
+		Email: "abc@sf",
 	}
 
 	if err := validate(user); err != nil {
