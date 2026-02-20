@@ -1,9 +1,8 @@
 package main
 
 import (
-	"cmp"
 	"fmt"
-	"slices"
+	"strings"
 )
 
 const (
@@ -15,7 +14,6 @@ const (
 )
 
 func main() {
-
 	// fmt.Printf("%sHello This is Red%s\n", Red, Reset)
 	// fmt.Printf("%sHello This is Green%s\n", Green, Reset)
 	// fmt.Println(Bold + Yellow + "Hello this is Yellow" + Reset)
@@ -57,40 +55,42 @@ func main() {
 	// )
 	// fmt.Printf("Hello %s welcome to secret panel :)\n", userName)
 
-	employees := []employee{
-		{name: "Pouya", age: 23},
-		{name: "Ali", age: 22},
-		{name: "Mona", age: 18},
-		{name: "Hassan", age: 35},
-		{name: "Behnam", age: 22},
-	}
-	fmt.Println("Employess before sorting:")
-	fmt.Println(employees)
+	// employees := []employee{
+	// 	{name: "Pouya", age: 23},
+	// 	{name: "Ali", age: 22},
+	// 	{name: "Mona", age: 18},
+	// 	{name: "Hassan", age: 35},
+	// 	{name: "Behnam", age: 22},
+	// }
+	// fmt.Println("Employess before sorting:")
+	// fmt.Println(employees)
 
-	fmt.Println("Employess after sorting:")
-	fmt.Println(sortEmployees(employees))
+	// fmt.Println("Employess after sorting:")
+	// fmt.Println(sortEmployees(employees))
+
+	fmt.Println(strings.HasSuffix("go.mod", ".mod"))
 
 }
 
-type employee struct {
-	name string
-	age  uint
-}
+// type employee struct {
+// 	name string
+// 	age  uint
+// }
 
-func sortEmployees(employees []employee) []employee {
-	sortedEmployess := employees
-	slices.SortFunc(
-		sortedEmployess,
-		func(a, b employee) int {
-			return cmp.Or(
-				cmp.Compare(a.age, b.age),
-				cmp.Compare(a.name, b.name),
-			)
-		},
-	)
+// func sortEmployees(employees []employee) []employee {
+// 	sortedEmployess := employees
+// 	slices.SortFunc(
+// 		sortedEmployess,
+// 		func(a, b employee) int {
+// 			return cmp.Or(
+// 				cmp.Compare(a.age, b.age),
+// 				cmp.Compare(a.name, b.name),
+// 			)
+// 		},
+// 	)
 
-	return sortedEmployess
-}
+// 	return sortedEmployess
+// }
 
 // func getPortFromFlag() string {
 // 	return "8080"
