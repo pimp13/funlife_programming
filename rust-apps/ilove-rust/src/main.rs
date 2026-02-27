@@ -1,57 +1,50 @@
-// struct Book {
-//     title: String,
-//     author: String,
-// }
+use futures::future::join_all;
+use reqwest;
+use tokio::{fs::File, io::AsyncWriteExt};
 
-// impl Book {
-//     fn print_info(self) {
-//         println!("TitleBook: {}, Author: {}", self.title, self.author);
-//     }
-// }
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // let filename = "rust-logo.png";
+    // let url = "https://www.rust-lang.org/logos/rust-logo-512x512.png";
+    // download(url, filename).await?;
+    // Ok(())
 
-use std::collections::HashMap;
+    let urls = vec![
+        ("http://picsum.photos/1920/1080", "img1.png"),
+        ("http://picsum.photos/1920/1080", "img2.jpg"),
+        ("http://picsum.photos/1920/1080", "img3.jpg"),
+        ("http://picsum.photos/1920/1080", "img4.jpg"),
+        ("http://picsum.photos/1920/1080", "img5.jpg"),
+        ("http://picsum.photos/1920/1080", "img6.jpg"),
+    ];
 
-struct Solution;
-
-impl Solution {
-    pub fn majority_element(nums: Vec<i32>) -> i32 {
-        let mut counts: HashMap<i32, i32> = HashMap::new();
-
-        for n in nums {
-            let or_insert = counts
-                .entry(n)
-                .and_modify(|counter| *counter += 1)
-                .or_insert(1);
-        }
-
-        42
-    }
-}
-
-fn main() {
-    // println!("Hi, my name is Pouya im programmer i love Golang, Rust, Python and Typescript.");
-    // Lifetime in rust
-    /*
-    error mideh: borrowed value does not live long enough
-    dar code payien variable z tarif shode va dar scoop variable x tarif shode
-    va refrence x ro yani meghdar x ro daram mirizam dar z
-    vali error mideh chon ke meghdar x ziyad zendeh nemimofe va chon dar scoop hast sari mimire
-
-    life time ba <'a> tarif mishe
-    */
-    // let z;
-    // {
-    //     let x = 42;
-    //     z = &x;
+    // for u in urls {
+    //     download(u.0, u.1).await?;
     // }
 
-    // let my_book = Book {
-    //     title: String::from("First My Book"),
-    //     author: String::from("DevPouyaGh"),
-    // };
-    // my_book.print_info();
+    let fut = urls.iter().map(|(url, name)| download(url, name));
+    let results = join_all(fut).await;
+    for result in results {
+        if let Err(e) = result {
+            eprintln!("failed to download async file from urls: {}", e)
+        }
+    }
 
-    let nums = vec![1, 2, 2, 3, 3, 3, 4, 5];
-    let result = Solution::majority_element(nums);
-    println!("{}", result);
+    Ok(())
+}
+
+async fn download(url: &str, filename: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let res = reqwest::get(url).await?;
+    let bytes = res.bytes().await?;
+
+    // use tokio file
+    let mut file = File::create(filename).await?;
+    file.write_all(&bytes).await?;
+
+    // use std file
+    // let mut file = File::create(filename)?;
+    // file.write_all(&bytes)?;
+
+    println!("Downloded {} is successfully!", filename);
+    Ok(())
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 const (
@@ -68,8 +67,18 @@ func main() {
 	// fmt.Println("Employess after sorting:")
 	// fmt.Println(sortEmployees(employees))
 
-	fmt.Println(strings.HasSuffix("go.mod", ".mod"))
+	// fmt.Println(strings.HasSuffix("go.mod", ".mod"))
 
+	// fmt.Println(sum([]int{1, 2, 3, 4, 5, 6}))
+	fmt.Println(sum(1, 2, 3, 4, 5, 6))
+}
+
+func sum(arr ...int) int {
+	var sum int
+	for i := 0; i < len(arr); i++ {
+		sum += arr[i]
+	}
+	return sum
 }
 
 // type employee struct {

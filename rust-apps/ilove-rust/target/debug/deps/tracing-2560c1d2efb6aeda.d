@@ -1,0 +1,12 @@
+/home/pouya/w/funlife_programming/rust-apps/ilove-rust/target/debug/deps/tracing-2560c1d2efb6aeda.d: /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/lib.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/macros.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/dispatcher.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/field.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/instrument.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/level_filters.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/span.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/subscriber.rs
+
+/home/pouya/w/funlife_programming/rust-apps/ilove-rust/target/debug/deps/libtracing-2560c1d2efb6aeda.rmeta: /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/lib.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/macros.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/dispatcher.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/field.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/instrument.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/level_filters.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/span.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/subscriber.rs
+
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/lib.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/macros.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/dispatcher.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/field.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/instrument.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/level_filters.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/span.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-0.1.44/src/subscriber.rs:

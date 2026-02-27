@@ -1,0 +1,11 @@
+/home/pouya/w/funlife_programming/rust-apps/ilove-rust/target/debug/deps/tokio_rustls-7b4a89591c4722b7.d: /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/lib.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/client.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/common/mod.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/common/handshake.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/server.rs
+
+/home/pouya/w/funlife_programming/rust-apps/ilove-rust/target/debug/deps/libtokio_rustls-7b4a89591c4722b7.rlib: /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/lib.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/client.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/common/mod.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/common/handshake.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/server.rs
+
+/home/pouya/w/funlife_programming/rust-apps/ilove-rust/target/debug/deps/libtokio_rustls-7b4a89591c4722b7.rmeta: /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/lib.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/client.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/common/mod.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/common/handshake.rs /home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/server.rs
+
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/lib.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/client.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/common/mod.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/common/handshake.rs:
+/home/pouya/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tokio-rustls-0.26.4/src/server.rs:
